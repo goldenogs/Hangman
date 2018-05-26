@@ -3,11 +3,12 @@
 
 
 
+
 import requests
 import json
 import re
 
-def ask_for_word(word, length):
+def make_tuples(word, length):
     # word = ['a', 'f', 'g', 'h']
     tuples = []
     # word = word.split(sep=' ')
@@ -23,7 +24,7 @@ def ask_for_word(word, length):
     # length = int(input("How long is the word you are looking for: "))
     return tuples, length
 
-def find_word(letters, length, dictionary):
+def search(letters, length, dictionary):
 
     possible_words = []
     same_length_words = dictionary[length]
@@ -78,7 +79,7 @@ for x in range(1,4000):
     edlist = ['e', 't']
     # j = 0
     # ['_ot', '__', '____e', '__ot', "_o__in'", 'on']
-    while data['remaining_guesses'] > 1 and data['status'] != 'FREE':
+    while data['remaining_guesses'] > 0 and data['status'] != 'FREE':
         j = 0
         # r = requests.post({'email':'goldenogs@gmail.com'})
         state = data['state']
@@ -90,13 +91,17 @@ for x in range(1,4000):
                 # print('continue1')
                 # continue
             # print(w)
-            if (len(w) - w.count('_')) > 1 and '\'' not in w and '_' in w: #change it to if there are 2 or more c
+            if '_' in w: #change it to if there are 2 or more c
                 re.sub(r'[a-z]', '', w)
                 for y in w:
                     if y.isalpha() and y not in gslist:
                         gslist.append((y, (w.index(y))))
-                letters, length = ask_for_word(gslist, len(w))
-                possiblew = find_word(letters, length, dictionary)
+                letters, length = make_tuple(gslist, len(w))
+                if '\'' in w:
+                    length -= 1
+                if ',' in w:
+                    length -= 1
+                possiblew = search(letters, length, dictionary)
 
                 # print(possiblew)
                 if possiblew and data['remaining_guesses'] > 0:
@@ -122,51 +127,30 @@ for x in range(1,4000):
                                 j+=1
                                 break
                         break
-                    break
+                    continue
 
             # else:
                 # print("no _")
 
 
-        if list[i] not in edlist and data['remaining_guesses'] > 1:
-            # print('outside if')
-            r = requests.post(url, {'guess': list[i]})
-            data = r.json()
-            print(data['state'])
-            edlist.append(list[i])
-        else:
-            i+=1
-                # if possiblew and data['status'] != 'DEAD':
-                #     for word in possiblew:
-                #         # print(word)
-                #         for gs in word:
-                #             if gs not in gslist and data['status'] != 'DEAD':
-                #                 r = requests.post(url, {'guess':gs})
-                #                 # print(gs)
-                #                 data = r.json()
-                #                 print(data['state'])
-                #                 print(data['status'])
-                # else:
-                #     for char in list:
-                #         if data['status'] != 'DEAD':
-                #             print(char)
-                #             r = requests.post(url, {'guess': char})
-                #
-                #             data = r.json()
-                #             print(data['state'])
-                        # if char not in gslist:
-                        #     r = requests.post(url, {'guess':char})
-                        #     data = r.json()
-                        #     print(data['state'])
-
-            # else:
-            #     for char in list:
-            #         r = requests.post(url, {'guess': char})
-            #         data = r.json()
-            #         print(data['state'])
-            #         print('else')
-
-            # print(gslist)
+        for ccc in list:
+            if ccc not in edlist and data['remaining_guesses'] > 0:
+                r = requests.post(url, {'guess': ccc})
+                data = r.json()
+                print(data['state'])
+                edlist.append(ccc)
+                break
+            else:
+                continue
+        # if list[i] not in edlist and data['remaining_guesses'] > 0:
+        #     # print('outside if')
+        #     r = requests.post(url, {'guess': list[i]})
+        #     data = r.json()
+        #     print(data['state'])
+        #     edlist.append(list[i])
+        # else:
+        #     print(i)
+        #     i+=1
 
         # print(state)
         data = r.json()
