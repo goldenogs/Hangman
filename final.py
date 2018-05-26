@@ -41,7 +41,7 @@ def search(letters, length, dictionary):
                 possible_words = [word for word in possible_words
                               if word[int(pair[1])].count(pair[0])]
         except:
-            print('weird exception')
+            pass
             # print
 
     return possible_words
@@ -96,10 +96,12 @@ for x in range(1,4000):
                 for y in w:
                     if y.isalpha() and y not in gslist:
                         gslist.append((y, (w.index(y))))
-                letters, length = make_tuple(gslist, len(w))
+                letters, length = make_tuples(gslist, len(w))
                 if '\'' in w:
                     length -= 1
                 if ',' in w:
+                    length -= 1
+                if '\"' in w:
                     length -= 1
                 possiblew = search(letters, length, dictionary)
 
@@ -128,6 +130,7 @@ for x in range(1,4000):
                                 break
                         break
                     continue
+                break
 
             # else:
                 # print("no _")
