@@ -1,7 +1,7 @@
-# I know its hard to read but basically this program makes a dictionary out of a file that contains all the words from about 1000 lyrics saved from the server. It gets a state each times it posts and split it into a list. The list of splited sentence updates each time it posts so that it predicts the next word with that dictionary. Once it figures out whats gonna show up next it then guesses the charecter in that prediction word and so on to the next segment. Win rate without protection is about 20%
-
-
 #!/usr/bin/env python3.6
+# I know its hard to read but basically this program makes a dictionary out of a file that contains all the words from about 1000 lyrics saved from the server. It gets a state each times it posts and split it into a list. The list of splited sentence updates each time it posts so that it predicts the next word with that dictionary. Once it figures out whats gonna show up next it then guesses the charecter in that prediction word and so on to the next segment. Win rate without protection is about 20%. Used some code borrowed from google. The code is mess cuz this is my second time using Python
+
+
 
 import requests
 import json
@@ -56,6 +56,9 @@ def makedict(filename):
                 d[len(l)].append(l)
     return d
 
+###################################################################
+##############################MAIN STUFF##########################
+###################################################################
 
 url = 'http://upe.42069.fun/W07HL'
 
